@@ -1,22 +1,17 @@
 package com.example.githubuserapp.ui
 
-import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuserapp.data.response.UserItem
-import com.example.githubuserapp.data.response.UsersResponse
-import com.example.githubuserapp.data.retrofit.ApiConfig
 import com.example.githubuserapp.databinding.FragmentSearchUserBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchUserFragment : Fragment() {
 
@@ -52,7 +47,7 @@ class SearchUserFragment : Fragment() {
             searchView.setupWithSearchBar(searchBar)
             searchView
                 .editText
-                .setOnEditorActionListener { textView, actionId, event ->
+                .setOnEditorActionListener { _, _, _ ->
                     searchBar.setText(searchView.text)
                     searchView.hide()
                     mainViewModel.searchUser(searchView.text.toString())
@@ -75,14 +70,19 @@ class SearchUserFragment : Fragment() {
         val adapter = UserAdapter()
         adapter.submitList(users)
         binding.rvUsers.adapter = adapter
+
+        adapter.setOnItemClickedCallback(object: UserAdapter.OnItemClickedCallback {
+            override fun onItemClicked(data: UserItem) {
+                showUserDetail(data)
+            }
+        })
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        binding.buttonFirst.setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
+    private fun showUserDetail(data: UserItem) {
+        val toDetailUser = SearchUserFragmentDirections
+            .actionSearchUserToDetailuser(
+                /* userUrl = */ data.login
+            )
+        findNavController().navigate(toDetailUser)
     }
 
     override fun onDestroyView() {
