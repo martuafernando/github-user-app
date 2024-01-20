@@ -86,7 +86,7 @@ class RelatedUserFragment : Fragment() {
          *
          * @param position Parameter 1.
          * @param username Parameter 2.
-         * @return A new instance of fragment UserRelatedFragment.
+         * @return A new instance of fragment RelatedUserFragment.
          */
         @JvmStatic
         fun newInstance(position: Int, username: String) =

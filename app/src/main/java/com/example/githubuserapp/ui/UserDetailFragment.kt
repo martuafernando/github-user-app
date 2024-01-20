@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -21,6 +22,9 @@ class UserDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     companion object {
+        private const val FOLLOWER_TAB_INDEX = 0
+        private const val FOLLOWING_TAB_INDEX = 1
+
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.tab_text_follower,
@@ -30,7 +34,7 @@ class UserDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         val userDetailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UserDetailViewModel::class.java]
@@ -55,7 +59,7 @@ class UserDetailFragment : Fragment() {
 
         val tabs: TabLayout = binding.tabs
         TabLayoutMediator(tabs, viewPager) { tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
+            tab.text = "${resources.getString(TAB_TITLES[position])} (0)"
         }.attach()
 
         userDetailViewModel.getUserDetail(username)
@@ -80,6 +84,10 @@ class UserDetailFragment : Fragment() {
             val username = "@${user.login}"
             binding.tvUserUsername.text = username
             binding.tvUserLocation.text = user.location ?: "Location Unknown"
+
+            val tabs: TabLayout = binding.tabs
+            tabs.getTabAt(FOLLOWER_TAB_INDEX)?.text = "${resources.getString(TAB_TITLES[FOLLOWER_TAB_INDEX])} (${user.followers})"
+            tabs.getTabAt(FOLLOWING_TAB_INDEX)?.text = "${resources.getString(TAB_TITLES[FOLLOWING_TAB_INDEX])} (${user.following})"
         }
     }
     override fun onDestroyView() {
