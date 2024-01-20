@@ -33,13 +33,13 @@ class UserDetailFragment : Fragment() {
     ): View? {
 
         _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
-        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+        val userDetailViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[UserDetailViewModel::class.java]
 
-        mainViewModel.isLoading.observe(viewLifecycleOwner) {
+        userDetailViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
-        mainViewModel.user.observe(viewLifecycleOwner) {
+        userDetailViewModel.user.observe(viewLifecycleOwner) {
             user -> setUserData(user)
         }
 
@@ -49,7 +49,7 @@ class UserDetailFragment : Fragment() {
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         sectionsPagerAdapter.username = username
-        
+
         val viewPager: ViewPager2 = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
 
@@ -58,7 +58,7 @@ class UserDetailFragment : Fragment() {
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
 
-        mainViewModel.getUserDetail(username)
+        userDetailViewModel.getUserDetail(username)
         return binding.root
     }
 

@@ -1,7 +1,6 @@
 package com.example.githubuserapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,29 +38,29 @@ class RelatedUserFragment : Fragment() {
             username = it.getString(ARG_USERNAME)
         }
 
-        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+        val relatedUserViewModel: RelatedUserViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[RelatedUserViewModel::class.java]
 
         val layoutManager = LinearLayoutManager(context)
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
 
-        mainViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-
         binding.rvUsers.layoutManager = layoutManager
         binding.rvUsers.addItemDecoration(itemDecoration)
 
+        relatedUserViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
+
         if (username != null) {
             if (position == 1) {
-                mainViewModel.listFollower.observe(viewLifecycleOwner) {
+                relatedUserViewModel.listFollower.observe(viewLifecycleOwner) {
                     follower -> setUserRelated(follower)
                 }
-                mainViewModel.getUserFollowers(username as String)
+                relatedUserViewModel.getUserFollowers(username as String)
             } else {
-                mainViewModel.listFollowing.observe(viewLifecycleOwner) {
+                relatedUserViewModel.listFollowing.observe(viewLifecycleOwner) {
                     following -> setUserRelated(following)
                 }
-                mainViewModel.getUserFollowings(username as String)
+                relatedUserViewModel.getUserFollowings(username as String)
             }
         }
 

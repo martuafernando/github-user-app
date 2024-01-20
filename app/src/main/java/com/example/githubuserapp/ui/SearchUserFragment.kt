@@ -1,6 +1,5 @@
 package com.example.githubuserapp.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,7 +29,7 @@ class SearchUserFragment : Fragment() {
 
         val layoutManager = LinearLayoutManager(context)
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
-        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[SearchUserViewModel::class.java]
 
         mainViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)

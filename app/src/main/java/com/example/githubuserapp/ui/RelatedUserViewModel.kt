@@ -13,59 +13,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel: ViewModel() {
+class RelatedUserViewModel: ViewModel() {
     private val apiService = ApiConfig.getApiService()
-    fun searchUser(username: String) {
-        _isLoading.value = true
-        val client = apiService.searchUsers(username)
-        client.enqueue(object: Callback<UsersResponse> {
-            override fun onResponse(
-                call: Call<UsersResponse>,
-                response: Response<UsersResponse>,
-            ) {
-                _isLoading.value = false
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
-                    _listUser.value = responseBody.items
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(
-                call: Call<UsersResponse>,
-                t: Throwable,
-            ) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
-    }
-
-    fun getUserDetail(username: String) {
-        _isLoading.value = true
-        val client = apiService.getDetailUser(username)
-
-        client.enqueue(object: Callback<UserDetail> {
-            override fun onResponse(call: Call<UserDetail>, response: Response<UserDetail>) {
-                _isLoading.value = false
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
-                    _user.value = responseBody
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(
-                call: Call<UserDetail>,
-                t: Throwable,
-            ) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
-    }
 
     fun getUserFollowers(username: String) {
         _isLoading.value = true
@@ -115,12 +64,6 @@ class MainViewModel: ViewModel() {
             }
         })
     }
-
-    private val _user = MutableLiveData<UserDetail?>()
-    val user: LiveData<UserDetail?> = _user
-
-    private val _listUser = MutableLiveData<List<UserItem>>()
-    val listUser: LiveData<List<UserItem>> = _listUser
 
     private val _listFollower = MutableLiveData<List<RelatedUser>>()
     val listFollower: LiveData<List<RelatedUser>> = _listFollower
